@@ -58,8 +58,8 @@ function matchesSearch(order) {
   return haystack.includes(normalizeText(searchTerm));
 }
 
-function getVisibleOrders() {
-  return listOrders().filter(
+function getVisibleOrders(orders) {
+  return orders.filter(
     (order) =>
       (activeStatus === 'all' || order.status === activeStatus) &&
       (activeType === 'all' || order.orderType === activeType) &&
@@ -200,15 +200,30 @@ function bindEvents() {
   });
 
   document.querySelectorAll('[data-next-status]').forEach((button) => {
-    button.addEventListener('click', () => {
-      updateOrderStatus(button.dataset.orderId, button.dataset.nextStatus);
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      try {
+        await updateOrderStatus(button.dataset.orderId, button.dataset.nextStatus);
+        await render();
+      } catch (error) {
+        window.alert(error.message);
+        button.disabled = false;
+      }
     });
   });
 
   document.querySelectorAll('[data-cancel-order]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const confirmed = window.confirm('¿Cancelar este pedido? La mesa quedará libre si estaba asociada.');
-      if (confirmed) updateOrderStatus(button.dataset.cancelOrder, 'cancelled');
+      if (!confirmed) return;
+      button.disabled = true;
+      try {
+        await updateOrderStatus(button.dataset.cancelOrder, 'cancelled');
+        await render();
+      } catch (error) {
+        window.alert(error.message);
+        button.disabled = false;
+      }
     });
   });
 
@@ -219,13 +234,13 @@ function bindEvents() {
   }
 }
 
-function render() {
+async function render() {
   if (!session) return;
 
-  const allOrders = listOrders();
-  const orders = getVisibleOrders();
+  const allOrders = await listOrders();
+  const orders = getVisibleOrders(allOrders);
 
-  renderAdminLayout({
+  await renderAdminLayout({
     active: 'orders',
     description: 'Mesa, para llevar y domicilio en un solo tablero. Avanza cada pedido hasta la entrega.',
     session,

@@ -12,10 +12,7 @@ import { renderAdminLayout } from './layout.js';
 
 const session = await requireAdmin('../login/');
 let editingProductId = null;
-
-function getEditingProduct() {
-  return listProducts({ includeUnavailable: true }).find((product) => product.id === editingProductId);
-}
+let formError = '';
 
 function categoryOptions(selected) {
   return PRODUCT_CATEGORIES.map(
@@ -23,12 +20,11 @@ function categoryOptions(selected) {
   ).join('');
 }
 
-function renderForm() {
-  const product = getEditingProduct();
-
+function renderForm(product) {
   return `
     <article class="admin-card">
       <h2>${product ? 'Editar producto' : 'Nuevo producto'}</h2>
+      ${formError ? `<p class="form-message">${escapeHtml(formError)}</p>` : ''}
       <form class="admin-form" id="productForm">
         <input type="hidden" name="id" value="${product?.id || ''}">
 
@@ -111,69 +107,87 @@ function renderProductCard(product) {
   `;
 }
 
-function bindEvents() {
-  document.querySelector('#productForm')?.addEventListener('submit', (event) => {
+function bindEvents(products) {
+  document.querySelector('#productForm')?.addEventListener('submit', async (event) => {
     event.preventDefault();
+    const submitButton = document.querySelector('#productForm button[type="submit"]');
     const data = new FormData(event.currentTarget);
     const category = data.get('category');
 
-    saveProduct({
-      available: data.get('available') === 'on',
-      category,
-      description: data.get('description'),
-      featured: data.get('featured') === 'on',
-      filters: [category],
-      id: data.get('id'),
-      image: data.get('image'),
-      name: data.get('name'),
-      price: data.get('price'),
-      tag: data.get('tag')
-    });
+    submitButton.disabled = true;
+    formError = '';
 
-    editingProductId = null;
-    render();
+    try {
+      await saveProduct({
+        available: data.get('available') === 'on',
+        category,
+        description: data.get('description'),
+        featured: data.get('featured') === 'on',
+        filters: [category],
+        id: data.get('id'),
+        image: data.get('image'),
+        name: data.get('name'),
+        price: data.get('price'),
+        tag: data.get('tag')
+      });
+
+      editingProductId = null;
+      await render();
+    } catch (error) {
+      formError = error.message;
+      submitButton.disabled = false;
+      await render();
+    }
   });
 
   document.querySelector('#cancelEditBtn')?.addEventListener('click', () => {
     editingProductId = null;
+    formError = '';
     render();
   });
 
   document.querySelectorAll('[data-edit-product]').forEach((button) => {
     button.addEventListener('click', () => {
       editingProductId = button.dataset.editProduct;
+      formError = '';
       render();
       document.querySelector('#productForm')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 
   document.querySelectorAll('[data-toggle-product]').forEach((button) => {
-    button.addEventListener('click', () => {
-      toggleProductAvailability(button.dataset.toggleProduct);
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      await toggleProductAvailability(button.dataset.toggleProduct);
+      await render();
     });
   });
 
   document.querySelectorAll('[data-delete-product]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const confirmed = window.confirm('¿Eliminar este producto del menú?');
-      if (confirmed) deleteProduct(button.dataset.deleteProduct);
+      if (!confirmed) return;
+      button.disabled = true;
+      await deleteProduct(button.dataset.deleteProduct);
+      await render();
     });
   });
 }
 
-function render() {
+async function render() {
   if (!session) return;
 
-  const products = listProducts({ includeUnavailable: true });
+  const products = await listProducts({ includeUnavailable: true });
+  const editingProduct = products.find((product) => product.id === editingProductId) || null;
 
-  renderAdminLayout({
+  await renderAdminLayout({
     active: 'products',
     description: 'Administra precios, imágenes, categorías y disponibilidad.',
     session,
     title: 'Menú',
     content: `
       <section class="admin-grid admin-grid--two">
-        ${renderForm()}
+        ${renderForm(editingProduct)}
         <article class="admin-card">
           <h2>Resumen</h2>
           <div class="admin-list">
@@ -199,7 +213,7 @@ function render() {
     `
   });
 
-  bindEvents();
+  bindEvents(products);
 }
 
 render();

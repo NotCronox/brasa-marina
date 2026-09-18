@@ -15,12 +15,15 @@ create table if not exists public.products (
   price integer not null check (price >= 0),
   image text not null,
   category text not null,
+  filters text[] not null default '{}',
   available boolean not null default true,
   featured boolean not null default false,
   tag text,
   created_at timestamptz not null default now(),
   updated_at timestamptz
 );
+
+alter table public.products add column if not exists filters text[] not null default '{}';
 
 create table if not exists public.delivery_zones (
   id text primary key,
@@ -107,10 +110,15 @@ create table if not exists public.order_items (
   id uuid primary key default gen_random_uuid(),
   order_id uuid not null references public.orders(id) on delete cascade,
   product_id uuid references public.products(id) on delete set null,
+  name text,
   quantity integer not null check (quantity > 0),
   unit_price integer not null check (unit_price >= 0),
   subtotal integer not null check (subtotal >= 0)
 );
+
+-- El nombre se copia al momento del pedido para que un plato renombrado o
+-- eliminado despues no altere el historico de pedidos ya hechos.
+alter table public.order_items add column if not exists name text;
 
 create table if not exists public.tables (
   id uuid primary key default gen_random_uuid(),
@@ -177,9 +185,14 @@ create trigger tables_touch_updated_at
 before update on public.tables
 for each row execute function public.touch_updated_at();
 
+-- security definer: el INSERT en order_status_history debe pasar aunque
+-- quien actualice el pedido no tenga permiso directo de escritura en esa
+-- tabla (solo hay política de lectura para admins).
 create or replace function public.record_order_status()
 returns trigger
 language plpgsql
+security definer
+set search_path = public
 as $$
 begin
   if tg_op = 'INSERT' or new.status is distinct from old.status then
@@ -339,10 +352,11 @@ begin
     from public.products
     where id = (item ->> 'product_id')::uuid;
 
-    insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
+    insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
     values (
       new_order.id,
       product_row.id,
+      product_row.name,
       greatest((item ->> 'quantity')::integer, 1),
       product_row.price,
       product_row.price * greatest((item ->> 'quantity')::integer, 1)
@@ -409,7 +423,7 @@ as $$
     'items', coalesce(
       jsonb_agg(
         jsonb_build_object(
-          'name', coalesce(p.name, 'Producto eliminado'),
+          'name', coalesce(oi.name, p.name, 'Producto eliminado'),
           'quantity', oi.quantity,
           'unit_price', oi.unit_price,
           'subtotal', oi.subtotal
@@ -425,6 +439,30 @@ as $$
     and o.lookup_token = input_lookup_token
   group by o.id;
 $$;
+
+-- Habilita eventos en vivo (Realtime) para que el panel admin y el sitio
+-- publico reciban cambios sin necesidad de recargar la pagina.
+do $$
+begin
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'orders') then
+    alter publication supabase_realtime add table public.orders;
+  end if;
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'order_items') then
+    alter publication supabase_realtime add table public.order_items;
+  end if;
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'products') then
+    alter publication supabase_realtime add table public.products;
+  end if;
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'tables') then
+    alter publication supabase_realtime add table public.tables;
+  end if;
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'restaurant_settings') then
+    alter publication supabase_realtime add table public.restaurant_settings;
+  end if;
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'delivery_zones') then
+    alter publication supabase_realtime add table public.delivery_zones;
+  end if;
+end $$;
 
 alter table public.admin_profiles enable row level security;
 alter table public.products enable row level security;
@@ -443,12 +481,15 @@ to authenticated
 using (public.is_admin())
 with check (public.is_admin());
 
+-- Los agotados se muestran igual en la carta con la etiqueta "Agotado"
+-- (mejor experiencia que ocultarlos): no hay dato sensible en un producto.
 drop policy if exists "Public can read available products" on public.products;
-create policy "Public can read available products"
+drop policy if exists "Public can read products" on public.products;
+create policy "Public can read products"
 on public.products
 for select
 to anon, authenticated
-using (available = true);
+using (true);
 
 drop policy if exists "Admins can manage products" on public.products;
 create policy "Admins can manage products"

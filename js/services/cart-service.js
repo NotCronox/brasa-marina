@@ -1,9 +1,22 @@
-import { getProduct } from './store.js';
+import { listProducts } from './store.js';
 
 const CART_KEY = 'brasa_marina_cart_v1';
 const MY_ORDERS_KEY = 'brasa_marina_my_orders_v1';
 const MY_ORDERS_LIMIT = 6;
 const listeners = new Set();
+
+let productsCache = null;
+
+async function ensureProductsCache() {
+  if (!productsCache) {
+    productsCache = await listProducts({ includeUnavailable: true });
+  }
+  return productsCache;
+}
+
+export function invalidateProductsCache() {
+  productsCache = null;
+}
 
 function readCart() {
   const raw = localStorage.getItem(CART_KEY);
@@ -23,7 +36,7 @@ function saveCart(cart) {
 }
 
 function notify() {
-  listeners.forEach((listener) => listener(getCartSummary()));
+  listeners.forEach((listener) => listener());
 }
 
 export function subscribeCart(listener) {
@@ -35,8 +48,11 @@ export function getCart() {
   return readCart();
 }
 
-export function addToCart(productId, quantity = 1) {
-  const product = getProduct(productId);
+export async function addToCart(productId, quantity = 1) {
+  invalidateProductsCache();
+  const products = await ensureProductsCache();
+  const product = products.find((item) => item.id === productId);
+
   if (!product || !product.available) {
     return { ok: false, message: 'Producto agotado' };
   }
@@ -73,10 +89,12 @@ export function clearCart() {
   notify();
 }
 
-export function getCartSummary() {
+export async function getCartSummary() {
+  const products = await ensureProductsCache();
+
   const items = readCart()
     .map((entry) => {
-      const product = getProduct(entry.productId);
+      const product = products.find((item) => item.id === entry.productId);
       if (!product) return null;
 
       return {

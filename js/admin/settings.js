@@ -1,4 +1,5 @@
 import { requireAdmin } from '../services/auth-service.js';
+import { isSupabaseConfigured } from '../services/supabase-config.js';
 import { getSettings, resetDemoStore, subscribe, updateSettings } from '../services/store.js';
 import { escapeHtml, formatCurrency, normalizeText } from '../utils/format.js';
 import { renderAdminLayout } from './layout.js';
@@ -7,9 +8,10 @@ const session = await requireAdmin('../login/');
 
 let draftZones = null;
 let feedback = '';
+let currentSettings = null;
 
 function getZones() {
-  return draftZones || getSettings().deliveryZones || [];
+  return draftZones || currentSettings?.deliveryZones || [];
 }
 
 function zoneRowTemplate(zone, index) {
@@ -111,7 +113,7 @@ function renderForm(settings) {
       </section>
 
       <div class="modal__actions">
-        <button class="btn btn--secondary btn--ink" type="button" id="resetDemoBtn">Restaurar demo</button>
+        ${isSupabaseConfigured() ? '' : '<button class="btn btn--secondary btn--ink" type="button" id="resetDemoBtn">Restaurar demo</button>'}
         <button class="btn btn--primary" type="submit">Guardar configuración</button>
       </div>
     </form>
@@ -135,35 +137,44 @@ function readZonesFromForm() {
 }
 
 function bindEvents() {
-  document.querySelector('#settingsForm')?.addEventListener('submit', (event) => {
+  document.querySelector('#settingsForm')?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
+    const submitButton = document.querySelector('#settingsForm button[type="submit"]');
     const formData = new FormData(event.currentTarget);
     const zones = readZonesFromForm();
 
     if (formData.get('deliveryEnabled') === 'on' && !zones.length) {
       feedback = 'Agrega al menos una zona de entrega para aceptar domicilios.';
-      render();
+      await render();
       return;
     }
 
-    updateSettings({
-      restaurantName: formData.get('restaurantName'),
-      phone: formData.get('phone'),
-      description: formData.get('description'),
-      whatsapp: formData.get('whatsapp'),
-      instagram: formData.get('instagram'),
-      address: formData.get('address'),
-      hours: formData.get('hours'),
-      tableCount: formData.get('tableCount'),
-      deliveryEnabled: formData.get('deliveryEnabled') === 'on',
-      deliveryMinOrder: formData.get('deliveryMinOrder'),
-      deliveryZones: zones
-    });
+    submitButton.disabled = true;
 
-    draftZones = null;
-    feedback = 'Configuración guardada. Los cambios ya se ven en el sitio público.';
-    render();
+    try {
+      await updateSettings({
+        restaurantName: formData.get('restaurantName'),
+        phone: formData.get('phone'),
+        description: formData.get('description'),
+        whatsapp: formData.get('whatsapp'),
+        instagram: formData.get('instagram'),
+        address: formData.get('address'),
+        hours: formData.get('hours'),
+        tableCount: formData.get('tableCount'),
+        deliveryEnabled: formData.get('deliveryEnabled') === 'on',
+        deliveryMinOrder: formData.get('deliveryMinOrder'),
+        deliveryZones: zones
+      });
+
+      draftZones = null;
+      feedback = 'Configuración guardada. Los cambios ya se ven en el sitio público.';
+      await render();
+    } catch (error) {
+      feedback = error.message;
+      submitButton.disabled = false;
+      await render();
+    }
   });
 
   document.querySelector('#addZoneBtn')?.addEventListener('click', () => {
@@ -181,29 +192,29 @@ function bindEvents() {
     });
   });
 
-  document.querySelector('#resetDemoBtn')?.addEventListener('click', () => {
+  document.querySelector('#resetDemoBtn')?.addEventListener('click', async () => {
     const confirmed = window.confirm('¿Restaurar productos, pedidos, mesas y configuración demo?');
     if (confirmed) {
-      resetDemoStore();
+      await resetDemoStore();
       draftZones = null;
       feedback = 'Datos demo restaurados.';
-      render();
+      await render();
     }
   });
 }
 
-function render() {
+async function render() {
   if (!session) return;
 
-  const settings = getSettings();
+  currentSettings = await getSettings();
 
-  renderAdminLayout({
+  await renderAdminLayout({
     active: 'settings',
     description: 'Datos del restaurante, cobertura de domicilios y costos de envío.',
     session,
     title: 'Configuración',
-    actions: `<span class="admin-badge">Envío mínimo ${formatCurrency(settings.deliveryMinOrder)}</span>`,
-    content: renderForm(settings)
+    actions: `<span class="admin-badge">Envío mínimo ${formatCurrency(currentSettings.deliveryMinOrder)}</span>`,
+    content: renderForm(currentSettings)
   });
 
   bindEvents();

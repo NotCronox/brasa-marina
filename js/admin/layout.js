@@ -16,11 +16,12 @@ export function statusBadge(status, orderType) {
   return `<span class="status-badge status-badge--${escapeHtml(meta.tone)}">${escapeHtml(meta.label)}</span>`;
 }
 
-export function renderAdminLayout({ active, title, description, session, content, actions = '' }) {
+export async function renderAdminLayout({ active, title, description, session, content, actions = '' }) {
   const app = document.querySelector('#adminApp');
   if (!app) return;
 
-  const openOrders = listOrders().filter((order) => ['pending', 'preparing'].includes(order.status)).length;
+  const orders = await listOrders().catch(() => []);
+  const openOrders = orders.filter((order) => ['pending', 'preparing'].includes(order.status)).length;
 
   app.innerHTML = `
     <div class="admin-shell">

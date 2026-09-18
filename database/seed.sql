@@ -53,28 +53,28 @@ select number, 'free'
 from generate_series(1, 20) as number
 on conflict (number) do nothing;
 
-insert into public.products (name, description, price, image, category, available, featured, tag)
+insert into public.products (name, description, price, image, category, filters, available, featured, tag)
 select *
 from (
   values
-    ('Ceviche de camarón y mango biche', 'Camarón curado en limón criollo, mango biche, cebolla morada, cilantro, ají dulce y chips de plátano.', 38000, 'assets/images/menu-ceviche-camaron.jpg', 'entradas', true, false, 'Entrada fría'),
-    ('Empanadas de jaiba y ají de coco', 'Masa de maíz crocante, jaiba especiada, sofrito costeño y emulsión suave de coco ahumado.', 29000, 'assets/images/menu-empanada-jaiba.jpg', 'entradas', true, false, 'Para picar'),
-    ('Patacones con hogao de camarón', 'Patacones crocantes, hogao costeño, camarón salteado, suero atollabuey y cilantro fresco.', 32000, 'assets/images/menu-ceviche-camaron.jpg', 'entradas', true, false, 'Compartir'),
-    ('Pulpo al carbón con puré de maduro', 'Pulpo tierno terminado a la brasa, puré de plátano maduro, aceite de cilantro y ensalada cítrica.', 72000, 'assets/images/menu-pulpo-carbon.jpg', 'brasa', true, false, 'Brasa'),
-    ('Pescado entero a la brasa', 'Pesca del día con salsa de coco, mantequilla de limón, ensalada de tomate y yuca dorada.', 74000, 'assets/images/plato-pescado-brasa-coco.jpg', 'brasa', true, true, 'Pesca del día'),
-    ('Arroz meloso de mariscos', 'Arroz cremoso con camarón, calamar, almejas, fondo de pescado tostado y sofrito caribeño.', 64000, 'assets/images/plato-arroz-cremoso-mariscos.jpg', 'fuertes', true, true, 'Arroces'),
-    ('Costillas caribeñas', 'Costillas glaseadas con panela, ron añejo y naranja agria, servidas con papas criollas y encurtidos.', 59000, 'assets/images/plato-costillas-caribenas.jpg', 'brasa', true, true, 'Fuego lento'),
-    ('Parrillada marina para dos', 'Langostinos, vieiras, pesca del día y vegetales de temporada con mantequilla de ajo y limón.', 118000, 'assets/images/galeria-04.jpg', 'fuertes', true, false, 'Compartir'),
-    ('Langostinos en curry de coco', 'Langostinos salteados, curry suave de coco, arroz jazmín, chips de ajo y cilantro cimarrón.', 69000, 'assets/images/galeria-04.jpg', 'fuertes', true, false, 'Mar'),
-    ('Burger Marina de pesca blanca', 'Filete de pescado apanado, pan brioche, ensalada de repollo, tártara de limón y papas rústicas.', 42000, 'assets/images/plato-pescado-brasa-coco.jpg', 'hamburguesas', true, false, 'Casa'),
-    ('Burger costeña de res ahumada', 'Carne de res, queso costeño, cebolla caramelizada, mayo de ají dulce y papas criollas.', 44000, 'assets/images/plato-costillas-caribenas.jpg', 'hamburguesas', true, false, 'Ahumada'),
-    ('Cóctel de corozo', 'Ron añejo, cordial de corozo, limón mandarino, jengibre y perfume de naranja quemada.', 34000, 'assets/images/coctel-corozo.jpg', 'bebidas', true, true, 'Coctelería'),
-    ('Limonada de coco tostado', 'Limón criollo, crema de coco, panela clara y ralladura de coco tostado. Cremosa, fría y balanceada.', 16000, 'assets/images/menu-limonada-coco.jpg', 'bebidas', true, false, 'Sin alcohol'),
-    ('Soda de panela y limón', 'Panela clara, soda fría, limón mandarino y sal marina. Refrescante para acompañar platos a la brasa.', 14000, 'assets/images/menu-limonada-coco.jpg', 'bebidas', true, false, 'Casa'),
-    ('Tarta de maracuyá y merengue', 'Base quebrada, crema de maracuyá, merengue tostado y sal marina para cerrar con frescura.', 24000, 'assets/images/menu-tarta-maracuya.jpg', 'postres', true, false, 'Postre cítrico'),
-    ('Cocadas tibias con ron de caña', 'Cocadas suaves, crema de vainilla, coco rallado y reducción ligera de ron cartagenero.', 22000, 'assets/images/menu-cocadas.jpg', 'postres', true, false, 'Dulce costeño'),
-    ('Flan de coco y panela', 'Flan cremoso de coco, caramelo de panela, crumble de maíz tostado y ralladura de limón.', 26000, 'assets/images/menu-tarta-maracuya.jpg', 'postres', false, false, 'Cierre dulce')
-) as seed(name, description, price, image, category, available, featured, tag)
+    ('Ceviche de camarón y mango biche', 'Camarón curado en limón criollo, mango biche, cebolla morada, cilantro, ají dulce y chips de plátano.', 38000, 'assets/images/menu-ceviche-camaron.jpg', 'entradas', array['entradas'], true, false, 'Entrada fría'),
+    ('Empanadas de jaiba y ají de coco', 'Masa de maíz crocante, jaiba especiada, sofrito costeño y emulsión suave de coco ahumado.', 29000, 'assets/images/menu-empanada-jaiba.jpg', 'entradas', array['entradas'], true, false, 'Para picar'),
+    ('Patacones con hogao de camarón', 'Patacones crocantes, hogao costeño, camarón salteado, suero atollabuey y cilantro fresco.', 32000, 'assets/images/menu-ceviche-camaron.jpg', 'entradas', array['entradas'], true, false, 'Compartir'),
+    ('Pulpo al carbón con puré de maduro', 'Pulpo tierno terminado a la brasa, puré de plátano maduro, aceite de cilantro y ensalada cítrica.', 72000, 'assets/images/menu-pulpo-carbon.jpg', 'brasa', array['entradas','brasa'], true, false, 'Brasa'),
+    ('Pescado entero a la brasa', 'Pesca del día con salsa de coco, mantequilla de limón, ensalada de tomate y yuca dorada.', 74000, 'assets/images/plato-pescado-brasa-coco.jpg', 'brasa', array['brasa','fuertes'], true, true, 'Pesca del día'),
+    ('Arroz meloso de mariscos', 'Arroz cremoso con camarón, calamar, almejas, fondo de pescado tostado y sofrito caribeño.', 64000, 'assets/images/plato-arroz-cremoso-mariscos.jpg', 'fuertes', array['fuertes'], true, true, 'Arroces'),
+    ('Costillas caribeñas', 'Costillas glaseadas con panela, ron añejo y naranja agria, servidas con papas criollas y encurtidos.', 59000, 'assets/images/plato-costillas-caribenas.jpg', 'brasa', array['brasa','fuertes'], true, true, 'Fuego lento'),
+    ('Parrillada marina para dos', 'Langostinos, vieiras, pesca del día y vegetales de temporada con mantequilla de ajo y limón.', 118000, 'assets/images/galeria-04.jpg', 'fuertes', array['fuertes','brasa'], true, false, 'Compartir'),
+    ('Langostinos en curry de coco', 'Langostinos salteados, curry suave de coco, arroz jazmín, chips de ajo y cilantro cimarrón.', 69000, 'assets/images/galeria-04.jpg', 'fuertes', array['fuertes'], true, false, 'Mar'),
+    ('Burger Marina de pesca blanca', 'Filete de pescado apanado, pan brioche, ensalada de repollo, tártara de limón y papas rústicas.', 42000, 'assets/images/plato-pescado-brasa-coco.jpg', 'hamburguesas', array['hamburguesas','fuertes'], true, false, 'Casa'),
+    ('Burger costeña de res ahumada', 'Carne de res, queso costeño, cebolla caramelizada, mayo de ají dulce y papas criollas.', 44000, 'assets/images/plato-costillas-caribenas.jpg', 'hamburguesas', array['hamburguesas','fuertes'], true, false, 'Ahumada'),
+    ('Cóctel de corozo', 'Ron añejo, cordial de corozo, limón mandarino, jengibre y perfume de naranja quemada.', 34000, 'assets/images/coctel-corozo.jpg', 'bebidas', array['bebidas'], true, true, 'Coctelería'),
+    ('Limonada de coco tostado', 'Limón criollo, crema de coco, panela clara y ralladura de coco tostado. Cremosa, fría y balanceada.', 16000, 'assets/images/menu-limonada-coco.jpg', 'bebidas', array['bebidas'], true, false, 'Sin alcohol'),
+    ('Soda de panela y limón', 'Panela clara, soda fría, limón mandarino y sal marina. Refrescante para acompañar platos a la brasa.', 14000, 'assets/images/menu-limonada-coco.jpg', 'bebidas', array['bebidas'], true, false, 'Casa'),
+    ('Tarta de maracuyá y merengue', 'Base quebrada, crema de maracuyá, merengue tostado y sal marina para cerrar con frescura.', 24000, 'assets/images/menu-tarta-maracuya.jpg', 'postres', array['postres'], true, false, 'Postre cítrico'),
+    ('Cocadas tibias con ron de caña', 'Cocadas suaves, crema de vainilla, coco rallado y reducción ligera de ron cartagenero.', 22000, 'assets/images/menu-cocadas.jpg', 'postres', array['postres'], true, false, 'Dulce costeño'),
+    ('Flan de coco y panela', 'Flan cremoso de coco, caramelo de panela, crumble de maíz tostado y ralladura de limón.', 26000, 'assets/images/menu-tarta-maracuya.jpg', 'postres', array['postres'], false, false, 'Cierre dulce')
+) as seed(name, description, price, image, category, filters, available, featured, tag)
 where not exists (
   select 1
   from public.products p
@@ -127,80 +127,80 @@ select
   'transfer', null
 where not exists (select 1 from public.orders where number = 1048);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 38000, 38000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 38000, 38000
 from public.orders o, public.products p
 where o.number = 1042 and p.name = 'Ceviche de camarón y mango biche'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 74000, 74000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 74000, 74000
 from public.orders o, public.products p
 where o.number = 1042 and p.name = 'Pescado entero a la brasa'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 64000, 64000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 64000, 64000
 from public.orders o, public.products p
 where o.number = 1043 and p.name = 'Arroz meloso de mariscos'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 2, 34000, 68000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 2, 34000, 68000
 from public.orders o, public.products p
 where o.number = 1043 and p.name = 'Cóctel de corozo'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 42000, 42000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 42000, 42000
 from public.orders o, public.products p
 where o.number = 1044 and p.name = 'Burger Marina de pesca blanca'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 22000, 22000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 22000, 22000
 from public.orders o, public.products p
 where o.number = 1044 and p.name = 'Cocadas tibias con ron de caña'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 118000, 118000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 118000, 118000
 from public.orders o, public.products p
 where o.number = 1045 and p.name = 'Parrillada marina para dos'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 59000, 59000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 59000, 59000
 from public.orders o, public.products p
 where o.number = 1045 and p.name = 'Costillas caribeñas'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 2, 29000, 58000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 2, 29000, 58000
 from public.orders o, public.products p
 where o.number = 1046 and p.name = 'Empanadas de jaiba y ají de coco'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 74000, 74000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 74000, 74000
 from public.orders o, public.products p
 where o.number = 1047 and p.name = 'Pescado entero a la brasa'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 2, 16000, 32000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 2, 16000, 32000
 from public.orders o, public.products p
 where o.number = 1047 and p.name = 'Limonada de coco tostado'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 64000, 64000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 64000, 64000
 from public.orders o, public.products p
 where o.number = 1048 and p.name = 'Arroz meloso de mariscos'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);
 
-insert into public.order_items (order_id, product_id, quantity, unit_price, subtotal)
-select o.id, p.id, 1, 24000, 24000
+insert into public.order_items (order_id, product_id, name, quantity, unit_price, subtotal)
+select o.id, p.id, p.name, 1, 24000, 24000
 from public.orders o, public.products p
 where o.number = 1048 and p.name = 'Tarta de maracuyá y merengue'
 and not exists (select 1 from public.order_items where order_id = o.id and product_id = p.id);

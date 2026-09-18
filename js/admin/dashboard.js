@@ -77,8 +77,7 @@ function renderRecentOrders(orders) {
     .join('');
 }
 
-function renderTopProducts() {
-  const products = getTopProducts(5);
+function renderTopProducts(products) {
   if (!products.length) return '<p class="cart-empty">Aún no hay ventas registradas.</p>';
 
   return products
@@ -115,13 +114,13 @@ function renderAlerts(orders) {
   `;
 }
 
-function render() {
+async function render() {
   if (!session) return;
 
-  const orders = listOrders();
+  const [orders, topProducts] = await Promise.all([listOrders(), getTopProducts(5)]);
   const stats = getStats(orders);
 
-  renderAdminLayout({
+  await renderAdminLayout({
     active: 'dashboard',
     description: 'Resumen operativo del restaurante: sala, para llevar y domicilios.',
     session,
@@ -176,7 +175,7 @@ function render() {
           <h2>Ventas por canal (hoy)</h2>
           <div class="channel-list">${renderChannelBreakdown(orders)}</div>
           <h2 class="admin-card__subtitle">Productos más vendidos</h2>
-          <div class="admin-list">${renderTopProducts()}</div>
+          <div class="admin-list">${renderTopProducts(topProducts)}</div>
         </article>
       </section>
     `

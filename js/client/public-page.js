@@ -2,7 +2,7 @@ import {
   PAYMENT_METHODS,
   PRODUCT_CATEGORIES,
   createOrder,
-  getOrder,
+  getPublicOrderStatus,
   getSettings,
   listProducts,
   listTables,
@@ -13,6 +13,7 @@ import {
   clearCart,
   getCartSummary,
   getMyOrders,
+  invalidateProductsCache,
   removeFromCart,
   saveMyOrder,
   subscribeCart,
@@ -30,8 +31,11 @@ import {
   toWhatsappNumber
 } from '../utils/format.js';
 
+const TRACKING_POLL_MS = 8000;
+
 let selectedFilter = 'todos';
-let activeOrderId = null;
+let activeTracking = null;
+let trackingTimer = null;
 let toastTimer = null;
 let lastFocusedElement = null;
 
@@ -111,12 +115,12 @@ function featuredCardTemplate(product) {
   `;
 }
 
-function renderMenu() {
+async function renderMenu() {
   const menuList = $('#menuList');
   const emptyMessage = $('#menuEmpty');
   if (!menuList) return;
 
-  const products = listProducts({ includeUnavailable: true });
+  const products = await listProducts({ includeUnavailable: true });
   const filteredProducts =
     selectedFilter === 'todos'
       ? products
@@ -129,13 +133,11 @@ function renderMenu() {
   }
 }
 
-function renderFeatured() {
+async function renderFeatured() {
   const grid = $('.featured__grid');
   if (!grid) return;
 
-  const featuredProducts = listProducts()
-    .filter((product) => product.featured)
-    .slice(0, 4);
+  const featuredProducts = (await listProducts()).filter((product) => product.featured).slice(0, 4);
 
   if (featuredProducts.length) {
     grid.innerHTML = featuredProducts.map(featuredCardTemplate).join('');
@@ -156,8 +158,8 @@ function setFilter(button) {
 
 /* --------------------------------------------------------------- carrito ---- */
 
-function renderCart() {
-  const summary = getCartSummary();
+async function renderCart() {
+  const summary = await getCartSummary();
   const cartItems = $('#cartItems');
   const hasUnavailable = summary.items.some((item) => !item.available);
 
@@ -217,10 +219,10 @@ function renderCart() {
   `;
 }
 
-function addProductToOrder(productId) {
+async function addProductToOrder(productId) {
   if (!productId) return;
 
-  const result = addToCart(productId);
+  const result = await addToCart(productId);
   showToast(result.message);
   renderCart();
 }
@@ -303,14 +305,15 @@ function getSelectedOrderType(form) {
   return new FormData(form).get('orderType') || 'table';
 }
 
-function populateTableSelect() {
+async function populateTableSelect() {
   const select = $('#tableNumberSelect');
   if (!select) return;
 
   const detectedTable = getTableFromUrl();
   const previous = select.value;
+  const tables = await listTables();
 
-  select.innerHTML = listTables()
+  select.innerHTML = tables
     .map((table) => {
       const isDetected = detectedTable === table.number;
       const statusLabel = isDetected ? 'Tu mesa' : table.status === 'free' ? 'Libre' : 'Ocupada';
@@ -322,8 +325,8 @@ function populateTableSelect() {
   if (preferred) select.value = preferred;
 }
 
-function populateDeliverySelects() {
-  const settings = getSettings();
+async function populateDeliverySelects() {
+  const settings = await getSettings();
   const zoneSelect = $('#deliveryZoneSelect');
   const paymentSelect = $('#paymentMethodSelect');
 
@@ -346,17 +349,19 @@ function populateDeliverySelects() {
   }
 }
 
-function getSelectedZone() {
+async function getSelectedZone() {
   const zoneId = $('#deliveryZoneSelect')?.value;
-  return (getSettings().deliveryZones || []).find((zone) => zone.id === zoneId) || null;
+  if (!zoneId) return null;
+  const settings = await getSettings();
+  return (settings.deliveryZones || []).find((zone) => zone.id === zoneId) || null;
 }
 
-function updateCheckoutFields() {
+async function updateCheckoutFields() {
   const form = $('#checkoutForm');
   if (!form) return;
 
   const type = getSelectedOrderType(form);
-  const settings = getSettings();
+  const settings = await getSettings();
 
   setGroupEnabled($('#tableField'), type === 'table');
   setGroupEnabled($('#phoneField'), type !== 'table');
@@ -384,14 +389,14 @@ function updateCheckoutFields() {
   renderCheckoutSummary();
 }
 
-function renderCheckoutSummary() {
-  const summary = getCartSummary();
+async function renderCheckoutSummary() {
+  const summary = await getCartSummary();
   const target = $('#checkoutSummary');
   const form = $('#checkoutForm');
   if (!target || !form) return;
 
   const isDelivery = getSelectedOrderType(form) === 'delivery';
-  const zone = isDelivery ? getSelectedZone() : null;
+  const zone = isDelivery ? await getSelectedZone() : null;
   const deliveryFee = zone?.fee || 0;
 
   target.innerHTML = `
@@ -430,8 +435,8 @@ function renderCheckoutSummary() {
   `;
 }
 
-function openCheckout() {
-  const summary = getCartSummary();
+async function openCheckout() {
+  const summary = await getCartSummary();
   const message = $('#checkoutMessage');
 
   if (!summary.items.length) {
@@ -444,9 +449,8 @@ function openCheckout() {
     return;
   }
 
-  populateTableSelect();
-  populateDeliverySelects();
-  updateCheckoutFields();
+  await Promise.all([populateTableSelect(), populateDeliverySelects()]);
+  await updateCheckoutFields();
   if (message) message.hidden = true;
   closeCart();
   openOverlay($('#checkoutModal'));
@@ -460,15 +464,18 @@ function showCheckoutMessage(message) {
   target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function handleCheckoutSubmit(event) {
+async function handleCheckoutSubmit(event) {
   event.preventDefault();
 
   const form = event.currentTarget;
   const formData = new FormData(form);
-  const summary = getCartSummary();
+  const summary = await getCartSummary();
+  const submitButton = $('button[type="submit"]', form);
+
+  if (submitButton) submitButton.disabled = true;
 
   try {
-    const order = createOrder({
+    const order = await createOrder({
       customerName: formData.get('customerName'),
       customerPhone: formData.get('customerPhone'),
       changeFor: formData.get('changeFor'),
@@ -483,13 +490,16 @@ function handleCheckoutSubmit(event) {
     });
 
     clearCart();
+    invalidateProductsCache();
     saveMyOrder(order);
     form.reset();
     closeOverlay($('#checkoutModal'));
-    showOrderStatus(order.id);
+    showOrderStatus({ number: order.number, lookupToken: order.lookupToken });
     showToast(`Pedido #${order.number} confirmado.`);
   } catch (error) {
     showCheckoutMessage(error.message);
+  } finally {
+    if (submitButton) submitButton.disabled = false;
   }
 }
 
@@ -563,11 +573,12 @@ function myOrdersTabsTemplate() {
         .map(
           (entry) => `
             <button
-              class="order-tabs__btn ${entry.id === activeOrderId ? 'is-active' : ''}"
+              class="order-tabs__btn ${entry.number === activeTracking?.number ? 'is-active' : ''}"
               type="button"
               role="tab"
-              aria-selected="${entry.id === activeOrderId}"
-              data-track-order="${entry.id}">
+              aria-selected="${entry.number === activeTracking?.number}"
+              data-track-order="${entry.number}"
+              data-track-token="${entry.lookupToken}">
               #${entry.number}
             </button>
           `
@@ -577,16 +588,20 @@ function myOrdersTabsTemplate() {
   `;
 }
 
-function renderOrderStatus(orderId) {
-  const order = getOrder(orderId);
+async function renderOrderStatus() {
   const target = $('#orderStatusContent');
-  if (!target) return;
+  if (!target || !activeTracking) return;
+
+  let order = null;
+  try {
+    order = await getPublicOrderStatus(activeTracking);
+  } catch (error) {
+    target.innerHTML = `${myOrdersTabsTemplate()}<p class="cart-empty">No pudimos cargar el pedido: ${escapeHtml(error.message)}</p>`;
+    return;
+  }
 
   if (!order) {
-    target.innerHTML = `
-      ${myOrdersTabsTemplate()}
-      <p class="cart-empty">No encontramos ese pedido en este navegador.</p>
-    `;
+    target.innerHTML = `${myOrdersTabsTemplate()}<p class="cart-empty">No encontramos ese pedido.</p>`;
     return;
   }
 
@@ -641,10 +656,27 @@ function renderOrderStatus(orderId) {
   `;
 }
 
-function showOrderStatus(orderId) {
-  activeOrderId = orderId;
-  renderOrderStatus(orderId);
+function stopTrackingPoll() {
+  clearInterval(trackingTimer);
+  trackingTimer = null;
+}
+
+function startTrackingPoll() {
+  stopTrackingPoll();
+  trackingTimer = setInterval(() => {
+    if ($('#orderStatusModal')?.classList.contains('is-open')) {
+      renderOrderStatus();
+    } else {
+      stopTrackingPoll();
+    }
+  }, TRACKING_POLL_MS);
+}
+
+function showOrderStatus({ number, lookupToken }) {
+  activeTracking = { number, lookupToken };
+  renderOrderStatus();
   openOverlay($('#orderStatusModal'));
+  startTrackingPoll();
 }
 
 function showLastOrder() {
@@ -653,13 +685,13 @@ function showLastOrder() {
     showToast('Todavía no tienes un pedido en este navegador.');
     return;
   }
-  showOrderStatus(lastOrder.id);
+  showOrderStatus({ number: lastOrder.number, lookupToken: lastOrder.lookupToken });
 }
 
 /* ------------------------------------------------- configuración pública ---- */
 
-function applySettingsToPage() {
-  const settings = getSettings();
+async function applySettingsToPage() {
+  const settings = await getSettings();
   const whatsappNumber = toWhatsappNumber(settings.whatsapp);
   const whatsappText = encodeURIComponent(`Hola, quiero hacer una reserva en ${settings.restaurantName}.`);
 
@@ -731,9 +763,13 @@ function bindPublicEvents() {
   $('#checkoutForm')?.addEventListener('change', updateCheckoutFields);
   $('#checkoutForm')?.addEventListener('submit', handleCheckoutSubmit);
 
-  $('#orderStatusCloseBtn')?.addEventListener('click', () => closeOverlay($('#orderStatusModal')));
+  $('#orderStatusCloseBtn')?.addEventListener('click', () => {
+    closeOverlay($('#orderStatusModal'));
+    stopTrackingPoll();
+  });
   $('#orderStatusCartBtn')?.addEventListener('click', () => {
     closeOverlay($('#orderStatusModal'));
+    stopTrackingPoll();
     $('#menu')?.scrollIntoView({ behavior: 'smooth' });
   });
 
@@ -746,14 +782,18 @@ function bindPublicEvents() {
 
     const increaseButton = target.closest('[data-cart-increase]');
     if (increaseButton) {
-      const item = getCartSummary().items.find((entry) => entry.productId === increaseButton.dataset.cartIncrease);
-      if (item) updateCartQuantity(item.productId, item.quantity + 1);
+      getCartSummary().then((summary) => {
+        const item = summary.items.find((entry) => entry.productId === increaseButton.dataset.cartIncrease);
+        if (item) updateCartQuantity(item.productId, item.quantity + 1);
+      });
     }
 
     const decreaseButton = target.closest('[data-cart-decrease]');
     if (decreaseButton) {
-      const item = getCartSummary().items.find((entry) => entry.productId === decreaseButton.dataset.cartDecrease);
-      if (item) updateCartQuantity(item.productId, item.quantity - 1);
+      getCartSummary().then((summary) => {
+        const item = summary.items.find((entry) => entry.productId === decreaseButton.dataset.cartDecrease);
+        if (item) updateCartQuantity(item.productId, item.quantity - 1);
+      });
     }
 
     const removeButton = target.closest('[data-cart-remove]');
@@ -761,8 +801,7 @@ function bindPublicEvents() {
 
     const trackButton = target.closest('[data-track-order]');
     if (trackButton) {
-      activeOrderId = trackButton.dataset.trackOrder;
-      renderOrderStatus(activeOrderId);
+      showOrderStatus({ number: trackButton.dataset.trackOrder, lookupToken: trackButton.dataset.trackToken });
     }
   });
 
@@ -771,6 +810,7 @@ function bindPublicEvents() {
       closeCart();
       closeOverlay($('#checkoutModal'));
       closeOverlay($('#orderStatusModal'));
+      stopTrackingPoll();
       return;
     }
 
@@ -805,6 +845,7 @@ export function initPublicOrdering() {
   applyQrContext();
 
   subscribe(() => {
+    invalidateProductsCache();
     renderMenu();
     renderFeatured();
     renderCart();
@@ -814,7 +855,9 @@ export function initPublicOrdering() {
       populateTableSelect();
     }
 
-    if (activeOrderId) renderOrderStatus(activeOrderId);
+    if (activeTracking && $('#orderStatusModal')?.classList.contains('is-open')) {
+      renderOrderStatus();
+    }
   });
 
   subscribeCart(() => {

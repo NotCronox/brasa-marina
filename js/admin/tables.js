@@ -5,8 +5,8 @@ import { renderAdminLayout } from './layout.js';
 
 const session = await requireAdmin('../login/');
 
-function getActiveOrderForTable(tableNumber) {
-  return listOrders().find(
+function getActiveOrderForTable(orders, tableNumber) {
+  return orders.find(
     (order) =>
       order.tableNumber === tableNumber &&
       order.orderType === 'table' &&
@@ -14,8 +14,8 @@ function getActiveOrderForTable(tableNumber) {
   );
 }
 
-function renderTableCard(table) {
-  const activeOrder = getActiveOrderForTable(table.number);
+function renderTableCard(table, orders) {
+  const activeOrder = getActiveOrderForTable(orders, table.number);
 
   return `
     <article class="table-card" data-status="${table.status}">
@@ -47,18 +47,20 @@ function renderTableCard(table) {
 
 function bindEvents() {
   document.querySelectorAll('[data-table-number]').forEach((button) => {
-    button.addEventListener('click', () => {
-      updateTableStatus(button.dataset.tableNumber, button.dataset.tableStatus);
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      await updateTableStatus(button.dataset.tableNumber, button.dataset.tableStatus);
+      await render();
     });
   });
 }
 
-function render() {
+async function render() {
   if (!session) return;
 
-  const tables = listTables();
+  const [tables, orders] = await Promise.all([listTables(), listOrders()]);
 
-  renderAdminLayout({
+  await renderAdminLayout({
     active: 'tables',
     description: 'Control visual de mesas y ocupación de salón.',
     session,
@@ -79,12 +81,12 @@ function render() {
         </article>
         <article class="stats-card">
           <span>Pedidos en sala</span>
-          <strong>${listOrders().filter((order) => order.orderType === 'table' && ['pending', 'preparing', 'ready'].includes(order.status)).length}</strong>
+          <strong>${orders.filter((order) => order.orderType === 'table' && ['pending', 'preparing', 'ready'].includes(order.status)).length}</strong>
         </article>
       </section>
 
       <section class="tables-grid">
-        ${tables.map(renderTableCard).join('')}
+        ${tables.map((table) => renderTableCard(table, orders)).join('')}
       </section>
     `
   });
