@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../">
+  <title>Menú y pedidos | Brasa Marina</title>
+  <meta name="description" content="Menú digital de Brasa Marina. Ordena desde tu mesa, para llevar o a domicilio en Cartagena.">
+  <meta name="theme-color" content="#082f3a">
+  <link rel="icon" href="assets/images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="header__container container">
+      <a href="index.html#inicio" class="header__logo">
+        <span class="header__logo-text">Brasa Marina</span>
+      </a>
+
+      <nav class="header__nav" id="headerNav">
+        <ul class="header__nav-list">
+          <li class="header__nav-item"><a href="index.html#inicio" class="header__nav-link">Inicio</a></li>
+          <li class="header__nav-item"><a href="index.html#sobre-nosotros" class="header__nav-link">Nosotros</a></li>
+          <li class="header__nav-item"><a href="menu/" class="header__nav-link">Ordenar</a></li>
+          <li class="header__nav-item"><a href="index.html#domicilios" class="header__nav-link">Domicilios</a></li>
+          <li class="header__nav-item"><a href="index.html#ubicacion" class="header__nav-link">Ubicación</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <a href="menu/#menu" class="header__cta btn btn--primary">Ordenar ahora</a>
+        <button class="cart-button" type="button" data-open-cart aria-label="Abrir mi pedido">
+          <span class="cart-button__label">Mi pedido</span>
+          <span class="cart-button__count" data-cart-count>0</span>
+        </button>
+      </div>
+
+      <button class="header__toggle" id="headerToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="headerNav">
+        <span class="header__toggle-bar"></span>
+        <span class="header__toggle-bar"></span>
+        <span class="header__toggle-bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="menu-page-hero">
+      <div class="container">
+        <p class="qr-banner" id="qrBanner" hidden>Estás ordenando desde la <strong>Mesa <span data-qr-table>00</span></strong></p>
+        <p class="hero__eyebrow">Menú digital</p>
+        <h1 class="hero__title">Ordena en segundos</h1>
+        <p class="hero__subtitle">Pide desde tu mesa, para llevar o a domicilio y sigue el estado de tu pedido en vivo.</p>
+        <p class="hero__badge" id="deliveryBanner" hidden>Domicilios disponibles en Cartagena</p>
+        <div class="hero__actions">
+          <a href="menu/#menu" class="btn btn--primary">Ver carta</a>
+          <button class="btn btn--secondary" type="button" data-my-order>Mi pedido</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="menu menu--standalone" id="menu">
+      <div class="menu__container container">
+        <div class="section-heading">
+          <p class="section-eyebrow">Carta completa</p>
+          <h2 class="section-title">Nuestro menú</h2>
+          <p class="section-description">Filtra por categoría, agrega tus platos favoritos y confirma el pedido cuando estés listo.</p>
+        </div>
+
+        <div class="menu__filters" id="menuFilters" role="tablist" aria-label="Filtrar platos por categoría">
+          <button class="menu__filter-btn is-active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
+          <button class="menu__filter-btn" data-filter="entradas" role="tab" aria-selected="false">Entradas</button>
+          <button class="menu__filter-btn" data-filter="fuertes" role="tab" aria-selected="false">Platos fuertes</button>
+          <button class="menu__filter-btn" data-filter="hamburguesas" role="tab" aria-selected="false">Hamburguesas</button>
+          <button class="menu__filter-btn" data-filter="brasa" role="tab" aria-selected="false">Brasa</button>
+          <button class="menu__filter-btn" data-filter="bebidas" role="tab" aria-selected="false">Bebidas</button>
+          <button class="menu__filter-btn" data-filter="postres" role="tab" aria-selected="false">Postres</button>
+        </div>
+
+        <div class="menu__list" id="menuList"></div>
+        <p class="menu__empty" id="menuEmpty" hidden>No hay platos disponibles en esta categoría por ahora.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__container container">
+      <div class="footer__brand">
+        <span class="footer__logo">Brasa Marina</span>
+        <p class="footer__tagline">Cocina caribeña contemporánea en Getsemaní, Cartagena.</p>
+      </div>
+
+      <nav class="footer__nav" aria-label="Enlaces del sitio">
+        <ul class="footer__nav-list">
+          <li><a href="index.html#inicio" class="footer__nav-link">Inicio</a></li>
+          <li><a href="index.html#sobre-nosotros" class="footer__nav-link">Nosotros</a></li>
+          <li><a href="menu/" class="footer__nav-link">Menú</a></li>
+          <li><a href="index.html#domicilios" class="footer__nav-link">Domicilios</a></li>
+          <li><a href="index.html#ubicacion" class="footer__nav-link">Ubicación</a></li>
+          <li><a href="admin/" class="footer__nav-link">Panel interno</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer__social">
+        <a href="https://www.instagram.com/brasamarinacartagena" class="footer__social-link" aria-label="Instagram de Brasa Marina" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/brasamarinacartagena" class="footer__social-link" aria-label="Facebook de Brasa Marina" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://wa.me/573000000000" class="footer__social-link" aria-label="WhatsApp de Brasa Marina" data-whatsapp-link>WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-bar" id="cartBar" hidden>
+    <div class="cart-bar__info">
+      <span><strong data-cart-count>0</strong> productos</span>
+      <strong data-cart-total>$0</strong>
+    </div>
+    <button class="btn btn--primary" type="button" data-open-cart>Ver pedido</button>
+  </div>
+
+  <div class="app-toast" id="appToast" role="status" aria-live="polite" hidden></div>
+  <div class="cart-backdrop" id="cartBackdrop" hidden></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-labelledby="cartDrawerTitle">
+    <div class="cart-drawer__header">
+      <div>
+        <p class="section-eyebrow">Pedido actual</p>
+        <h2 class="cart-drawer__title" id="cartDrawerTitle">Mi pedido</h2>
+      </div>
+      <button class="icon-button" id="cartCloseBtn" type="button" aria-label="Cerrar carrito">×</button>
+    </div>
+    <div class="cart-drawer__body" id="cartItems"></div>
+    <div class="cart-drawer__footer">
+      <div class="cart-drawer__total">
+        <span>Subtotal</span>
+        <strong data-cart-total>$0</strong>
+      </div>
+      <p class="cart-drawer__note">El costo de domicilio se calcula en el siguiente paso según tu zona.</p>
+      <button class="btn btn--primary" id="cartCheckoutBtn" type="button">Continuar pedido</button>
+    </div>
+  </aside>
+
+  <section class="modal" id="checkoutModal" aria-hidden="true" aria-labelledby="checkoutTitle">
+    <div class="modal__panel">
+      <div class="modal__header">
+        <div>
+          <p class="section-eyebrow">Confirmación</p>
+          <h2 class="modal__title" id="checkoutTitle">Hacer pedido</h2>
+        </div>
+        <button class="icon-button" id="checkoutCloseBtn" type="button" aria-label="Cerrar checkout">×</button>
+      </div>
+
+      <form class="checkout-form" id="checkoutForm">
+        <fieldset class="checkout-form__group">
+          <legend>Tipo de pedido</legend>
+          <div class="choice-grid">
+            <label class="choice-card is-selected">
+              <input type="radio" name="orderType" value="table" checked data-autofocus>
+              <span>
+                <strong>En mesa</strong>
+                <small>Ideal si entraste desde el QR del restaurante.</small>
+              </span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="orderType" value="takeaway">
+              <span>
+                <strong>Para llevar</strong>
+                <small>Lo recoges en barra cuando esté listo.</small>
+              </span>
+            </label>
+            <label class="choice-card" id="deliveryChoice">
+              <input type="radio" name="orderType" value="delivery">
+              <span>
+                <strong>Domicilio</strong>
+                <small>Te lo llevamos a tu dirección en Cartagena.</small>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-grid">
+          <label class="form-field" id="tableField">
+            <span>Mesa</span>
+            <select name="tableNumber" id="tableNumberSelect"></select>
+          </label>
+
+          <label class="form-field">
+            <span>Nombre</span>
+            <input type="text" name="customerName" placeholder="Ej: Camila R." autocomplete="name">
+          </label>
+
+          <label class="form-field" id="phoneField" hidden>
+            <span>Teléfono de contacto</span>
+            <input type="tel" name="customerPhone" placeholder="Ej: 300 555 0000" autocomplete="tel" inputmode="tel">
+          </label>
+        </div>
+
+        <fieldset class="checkout-form__group checkout-form__group--boxed" id="deliveryFields" hidden>
+          <legend>Datos de entrega</legend>
+          <p class="checkout-form__hint" id="deliveryMinNote"></p>
+
+          <div class="form-grid">
+            <label class="form-field">
+              <span>Zona de entrega</span>
+              <select name="deliveryZoneId" id="deliveryZoneSelect" required></select>
+            </label>
+
+            <label class="form-field">
+              <span>Método de pago</span>
+              <select name="paymentMethod" id="paymentMethodSelect"></select>
+            </label>
+          </div>
+
+          <label class="form-field">
+            <span>Dirección de entrega</span>
+            <input type="text" name="deliveryAddress" placeholder="Ej: Carrera 2 #8-45, Edificio Mar Azul, Apto 704" autocomplete="street-address" required>
+          </label>
+
+          <label class="form-field">
+            <span>Punto de referencia (opcional)</span>
+            <input type="text" name="deliveryReference" placeholder="Portería, color de la casa, piso...">
+          </label>
+
+          <label class="form-field" id="changeField">
+            <span>¿Con cuánto pagas?</span>
+            <input type="text" name="changeFor" placeholder="Ej: 100.000" inputmode="numeric">
+          </label>
+        </fieldset>
+
+        <label class="form-field">
+          <span>Notas especiales</span>
+          <textarea name="notes" rows="3" placeholder="Sin cebolla, alergias, salsas aparte..."></textarea>
+        </label>
+
+        <div class="order-summary" id="checkoutSummary"></div>
+        <p class="form-message" id="checkoutMessage" role="alert" hidden></p>
+
+        <div class="modal__actions">
+          <button class="btn btn--secondary btn--ink" id="checkoutBackBtn" type="button">Volver al carrito</button>
+          <button class="btn btn--primary" type="submit">Confirmar pedido</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="modal" id="orderStatusModal" aria-hidden="true" aria-labelledby="orderStatusTitle">
+    <div class="modal__panel modal__panel--narrow">
+      <div class="modal__header">
+        <div>
+          <p class="section-eyebrow">Seguimiento</p>
+          <h2 class="modal__title" id="orderStatusTitle">Estado del pedido</h2>
+        </div>
+        <button class="icon-button" id="orderStatusCloseBtn" type="button" aria-label="Cerrar seguimiento">×</button>
+      </div>
+      <div id="orderStatusContent"></div>
+      <div class="modal__actions">
+        <button class="btn btn--primary" id="orderStatusCartBtn" type="button">Seguir ordenando</button>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

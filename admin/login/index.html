@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión | Brasa Marina</title>
+  <link rel="icon" href="../../assets/images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <span class="login-card__brand">Brasa Marina</span>
+    <p>Acceso administrativo para pedidos, domicilios, menú, mesas y estadísticas.</p>
+    <p class="admin-badge" id="loginMode">Modo demo local</p>
+
+    <form id="adminLoginForm">
+      <label class="form-field">
+        <span>Email</span>
+        <input type="email" name="email" autocomplete="email" placeholder="admin@brasamarina.co" required>
+      </label>
+
+      <label class="form-field">
+        <span>Contraseña</span>
+        <input type="password" name="password" autocomplete="current-password" placeholder="Tu contraseña" required>
+      </label>
+
+      <p class="form-message" id="loginMessage" hidden></p>
+
+      <button class="btn btn--primary" type="submit">Iniciar sesión</button>
+      <button class="btn btn--secondary btn--ink" type="button" id="demoLoginBtn">Entrar con la cuenta demo</button>
+    </form>
+
+    <div class="login-card__hint" id="demoHint">
+      <strong>¿Cómo entro?</strong>
+      <p>
+        Este proyecto corre en modo demo local: cualquier correo y contraseña abren el panel.
+        La cuenta sugerida es <code>admin@brasamarina.co</code> / <code>demo1234</code>.
+      </p>
+    </div>
+
+    <a class="login-card__back" href="../../index.html">← Volver al sitio público</a>
+  </main>
+
+  <script type="module" src="../../js/admin/login.js"></script>
+</body>
+</html>

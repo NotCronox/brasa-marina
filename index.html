@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brasa Marina | Cocina Caribeña Contemporánea en Getsemaní, Cartagena</title>
+  <meta name="description" content="Brasa Marina — restaurante de cocina caribeña contemporánea en Getsemaní, Cartagena. Pide en mesa, para llevar o a domicilio y sigue tu pedido en tiempo real.">
+  <meta name="theme-color" content="#082f3a">
+
+  <meta property="og:type" content="restaurant">
+  <meta property="og:title" content="Brasa Marina | Cocina caribeña en Getsemaní, Cartagena">
+  <meta property="og:description" content="Mariscos frescos, brasas encendidas y coctelería tropical. Pide en mesa, para llevar o a domicilio.">
+  <meta property="og:image" content="assets/images/hero-brasa-marina.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/images/favicon.png" type="image/png">
+  <link rel="preload" as="image" href="assets/images/hero-brasa-marina.jpg">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Brasa Marina",
+    "servesCuisine": "Caribeña contemporánea",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Calle de la Media Luna #10-42, Getsemaní",
+      "addressLocality": "Cartagena de Indias",
+      "addressRegion": "Bolívar",
+      "addressCountry": "CO"
+    },
+    "hasDeliveryMethod": "https://schema.org/OnSitePickup",
+    "acceptsReservations": "True"
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ============================= -->
+  <!-- HEADER -->
+  <!-- ============================= -->
+  <header class="header" id="header">
+    <div class="header__container container">
+
+      <a href="#inicio" class="header__logo">
+        <span class="header__logo-text">Brasa Marina</span>
+      </a>
+
+      <nav class="header__nav" id="headerNav">
+        <ul class="header__nav-list">
+          <li class="header__nav-item"><a href="#inicio" class="header__nav-link">Inicio</a></li>
+          <li class="header__nav-item"><a href="#sobre-nosotros" class="header__nav-link">Nosotros</a></li>
+          <li class="header__nav-item"><a href="#destacados" class="header__nav-link">Destacados</a></li>
+          <li class="header__nav-item"><a href="#menu" class="header__nav-link">Menú</a></li>
+          <li class="header__nav-item"><a href="#domicilios" class="header__nav-link">Domicilios</a></li>
+          <li class="header__nav-item"><a href="#galeria" class="header__nav-link">Galería</a></li>
+          <li class="header__nav-item"><a href="#resenas" class="header__nav-link">Reseñas</a></li>
+          <li class="header__nav-item"><a href="#ubicacion" class="header__nav-link">Ubicación</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <a href="#menu" class="header__cta btn btn--primary">Ordenar ahora</a>
+        <button class="cart-button" type="button" data-open-cart aria-label="Abrir mi pedido">
+          <span class="cart-button__label">Mi pedido</span>
+          <span class="cart-button__count" data-cart-count>0</span>
+        </button>
+      </div>
+
+      <button class="header__toggle" id="headerToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="headerNav">
+        <span class="header__toggle-bar"></span>
+        <span class="header__toggle-bar"></span>
+        <span class="header__toggle-bar"></span>
+      </button>
+
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============================= -->
+    <!-- HERO PRINCIPAL -->
+    <!-- ============================= -->
+    <section class="hero" id="inicio">
+      <div class="hero__media">
+        <img src="assets/images/hero-brasa-marina.jpg" alt="Bandeja de mariscos a la brasa servida en mesa de restaurante" class="hero__img" fetchpriority="high" decoding="async">
+        <div class="hero__overlay"></div>
+      </div>
+
+      <div class="hero__content container">
+        <p class="hero__eyebrow">Getsemaní · Cartagena de Indias</p>
+        <h1 class="hero__title">Brasa Marina</h1>
+        <p class="hero__subtitle">Mariscos frescos, brasas encendidas y coctelería tropical en una casa cálida del Caribe cartagenero.</p>
+
+        <p class="hero__badge" id="deliveryBanner" hidden>Domicilios disponibles en Cartagena · Sigue tu pedido en vivo</p>
+
+        <div class="hero__actions">
+          <a href="#menu" class="btn btn--primary">Ordenar ahora</a>
+          <a href="#domicilios" class="btn btn--secondary">Pedir a domicilio</a>
+          <button class="btn btn--secondary" type="button" data-my-order>Mi pedido</button>
+        </div>
+      </div>
+
+      <a href="#sobre-nosotros" class="hero__scroll" aria-label="Desplazarse a la siguiente sección">
+        <span class="hero__scroll-line"></span>
+      </a>
+    </section>
+
+    <!-- ============================= -->
+    <!-- SOBRE EL RESTAURANTE -->
+    <!-- ============================= -->
+    <section class="about" id="sobre-nosotros">
+      <div class="about__container container">
+
+        <div class="about__media">
+          <img src="assets/images/about-cocina.jpg" alt="Cocinero trabajando en la plancha caliente de un restaurante" class="about__img" loading="lazy" decoding="async">
+        </div>
+
+        <div class="about__content">
+          <p class="section-eyebrow">Nuestra historia</p>
+          <h2 class="section-title">Cocina de costa, mercado y brasa lenta</h2>
+          <p class="about__text">
+            En el corazón de Getsemaní, Brasa Marina nace como una mesa para celebrar el producto
+            de la costa: pesca del día, mariscos de temporada, vegetales del mercado local y fondos
+            preparados con coco, ají dulce, cilantro cimarrón y limón criollo.
+          </p>
+          <p class="about__text">
+            La carta mezcla técnicas de brasa, cocciones lentas y recetas caribeñas reinterpretadas
+            con una presentación actual. La experiencia está pensada para cenas tranquilas, celebraciones
+            y viajeros que quieren probar Cartagena más allá del plato típico.
+          </p>
+
+          <ul class="about__highlights">
+            <li class="about__highlight">
+              <span class="about__highlight-number">18</span>
+              <span class="about__highlight-label">Proveedores locales</span>
+            </li>
+            <li class="about__highlight">
+              <span class="about__highlight-number">48h</span>
+              <span class="about__highlight-label">Fondos y adobos</span>
+            </li>
+            <li class="about__highlight">
+              <span class="about__highlight-number">4.8</span>
+              <span class="about__highlight-label">Experiencia promedio</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- PLATOS DESTACADOS -->
+    <!-- ============================= -->
+    <section class="featured" id="destacados">
+      <div class="featured__container container">
+
+        <div class="section-heading">
+          <p class="section-eyebrow">Lo mejor de la brasa</p>
+          <h2 class="section-title">Platos destacados</h2>
+          <p class="section-description">Una selección de platos pensados para compartir, probar y volver a pedir.</p>
+        </div>
+
+        <div class="featured__grid">
+
+          <article class="dish-card">
+            <div class="dish-card__media">
+              <img src="assets/images/plato-pescado-brasa-coco.jpg" alt="Pescado a la brasa con salsa de coco" class="dish-card__img">
+            </div>
+            <div class="dish-card__body">
+              <h3 class="dish-card__name">Pescado entero a la brasa</h3>
+              <p class="dish-card__description">Pesca del día con mantequilla de limón, ají dulce y salsa cremosa de coco.</p>
+              <span class="dish-card__price">$74.000 COP</span>
+            </div>
+          </article>
+
+          <article class="dish-card">
+            <div class="dish-card__media">
+              <img src="assets/images/plato-arroz-cremoso-mariscos.jpg" alt="Arroz cremoso de mariscos" class="dish-card__img">
+            </div>
+            <div class="dish-card__body">
+              <h3 class="dish-card__name">Arroz meloso de mariscos</h3>
+              <p class="dish-card__description">Camarón, calamar, almejas y sofrito caribeño en fondo de pescado tostado.</p>
+              <span class="dish-card__price">$64.000 COP</span>
+            </div>
+          </article>
+
+          <article class="dish-card">
+            <div class="dish-card__media">
+              <img src="assets/images/plato-costillas-caribenas.jpg" alt="Costillas caribeñas" class="dish-card__img">
+            </div>
+            <div class="dish-card__body">
+              <h3 class="dish-card__name">Costillas caribeñas</h3>
+              <p class="dish-card__description">Costillas de cocción lenta, glaseadas con panela, ron añejo y naranja agria.</p>
+              <span class="dish-card__price">$59.000 COP</span>
+            </div>
+          </article>
+
+          <article class="dish-card">
+            <div class="dish-card__media">
+              <img src="assets/images/coctel-corozo.jpg" alt="Cóctel de corozo" class="dish-card__img">
+            </div>
+            <div class="dish-card__body">
+              <h3 class="dish-card__name">Cóctel de corozo</h3>
+              <p class="dish-card__description">Ron añejo, cordial de corozo, limón mandarino y un toque seco de jengibre.</p>
+              <span class="dish-card__price">$34.000 COP</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- MENÚ FILTRABLE -->
+    <!-- ============================= -->
+    <section class="menu" id="menu">
+      <div class="menu__container container">
+
+        <div class="section-heading">
+          <p class="section-eyebrow">Carta completa</p>
+          <h2 class="section-title">Nuestro menú</h2>
+          <p class="section-description">Filtra por categoría y descubre una carta de mar, brasa, antojos caribeños y cocteles de autor.</p>
+        </div>
+
+        <div class="menu__filters" id="menuFilters" role="tablist" aria-label="Filtrar platos por categoría">
+          <button class="menu__filter-btn is-active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
+          <button class="menu__filter-btn" data-filter="entradas" role="tab" aria-selected="false">Entradas</button>
+          <button class="menu__filter-btn" data-filter="fuertes" role="tab" aria-selected="false">Platos fuertes</button>
+          <button class="menu__filter-btn" data-filter="hamburguesas" role="tab" aria-selected="false">Hamburguesas</button>
+          <button class="menu__filter-btn" data-filter="brasa" role="tab" aria-selected="false">Brasa</button>
+          <button class="menu__filter-btn" data-filter="bebidas" role="tab" aria-selected="false">Bebidas</button>
+          <button class="menu__filter-btn" data-filter="postres" role="tab" aria-selected="false">Postres</button>
+        </div>
+
+        <div class="menu__list" id="menuList">
+
+          <article class="menu__item" data-category="entradas">
+            <div class="menu__item-media">
+              <img src="assets/images/menu-ceviche-camaron.jpg" alt="Ceviche de camarón con limón y tostadas" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Entrada fría</span>
+                <span class="menu__item-price">$38.000</span>
+              </div>
+              <h3 class="menu__item-name">Ceviche de camarón y mango biche</h3>
+              <p class="menu__item-description">Camarón curado en limón criollo, mango biche, cebolla morada, cilantro, ají dulce y chips de plátano.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="entradas">
+            <div class="menu__item-media">
+              <img src="assets/images/menu-empanada-jaiba.jpg" alt="Empanada dorada servida con salsa verde" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Para picar</span>
+                <span class="menu__item-price">$29.000</span>
+              </div>
+              <h3 class="menu__item-name">Empanadas de jaiba y ají de coco</h3>
+              <p class="menu__item-description">Masa de maíz crocante, jaiba especiada, sofrito costeño y emulsión suave de coco ahumado.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="entradas brasa">
+            <div class="menu__item-media">
+              <img src="assets/images/menu-pulpo-carbon.jpg" alt="Pulpo a la brasa servido con ensalada y vino" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Brasa</span>
+                <span class="menu__item-price">$72.000</span>
+              </div>
+              <h3 class="menu__item-name">Pulpo al carbón con puré de maduro</h3>
+              <p class="menu__item-description">Pulpo tierno terminado a la brasa, puré de plátano maduro, aceite de cilantro y ensalada cítrica.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="brasa fuertes">
+            <div class="menu__item-media">
+              <img src="assets/images/plato-pescado-brasa-coco.jpg" alt="Pescado entero a la brasa con limón" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Pesca del día</span>
+                <span class="menu__item-price">$74.000</span>
+              </div>
+              <h3 class="menu__item-name">Pescado entero a la brasa</h3>
+              <p class="menu__item-description">Servido con salsa de coco, mantequilla de limón, ensalada de tomate y yuca dorada.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="fuertes">
+            <div class="menu__item-media">
+              <img src="assets/images/plato-arroz-cremoso-mariscos.jpg" alt="Arroz meloso de mariscos con camarón y calamar" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Arroces</span>
+                <span class="menu__item-price">$64.000</span>
+              </div>
+              <h3 class="menu__item-name">Arroz meloso de mariscos</h3>
+              <p class="menu__item-description">Arroz cremoso con camarón, calamar, almejas, fondo de pescado tostado y sofrito caribeño.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="brasa fuertes">
+            <div class="menu__item-media">
+              <img src="assets/images/plato-costillas-caribenas.jpg" alt="Costillas glaseadas con papas rústicas" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Fuego lento</span>
+                <span class="menu__item-price">$59.000</span>
+              </div>
+              <h3 class="menu__item-name">Costillas caribeñas</h3>
+              <p class="menu__item-description">Costillas glaseadas con panela, ron añejo y naranja agria, servidas con papas criollas y encurtidos.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="fuertes">
+            <div class="menu__item-media">
+              <img src="assets/images/galeria-04.jpg" alt="Langosta, camarones y vieiras en plato de mariscos" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Compartir</span>
+                <span class="menu__item-price">$118.000</span>
+              </div>
+              <h3 class="menu__item-name">Parrillada marina para dos</h3>
+              <p class="menu__item-description">Langostinos, vieiras, pesca del día y vegetales de temporada con mantequilla de ajo y limón.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="bebidas">
+            <div class="menu__item-media">
+              <img src="assets/images/coctel-corozo.jpg" alt="Cóctel tropical color naranja servido en copa" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Coctelería</span>
+                <span class="menu__item-price">$34.000</span>
+              </div>
+              <h3 class="menu__item-name">Cóctel de corozo</h3>
+              <p class="menu__item-description">Ron añejo, cordial de corozo, limón mandarino, jengibre y perfume de naranja quemada.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="bebidas">
+            <div class="menu__item-media">
+              <img src="assets/images/menu-limonada-coco.jpg" alt="Bebidas cremosas servidas dentro de cocos frescos" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Sin alcohol</span>
+                <span class="menu__item-price">$16.000</span>
+              </div>
+              <h3 class="menu__item-name">Limonada de coco tostado</h3>
+              <p class="menu__item-description">Limón criollo, crema de coco, panela clara y ralladura de coco tostado. Cremosa, fría y balanceada.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="postres">
+            <div class="menu__item-media">
+              <img src="assets/images/menu-tarta-maracuya.jpg" alt="Tarta con merengue tostado sobre plato naranja" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Postre cítrico</span>
+                <span class="menu__item-price">$24.000</span>
+              </div>
+              <h3 class="menu__item-name">Tarta de maracuyá y merengue</h3>
+              <p class="menu__item-description">Base quebrada, crema de maracuyá, merengue tostado y sal marina para cerrar con frescura.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="postres">
+            <div class="menu__item-media">
+              <img src="assets/images/menu-cocadas.jpg" alt="Cocadas blancas con cobertura de coco" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Dulce costeño</span>
+                <span class="menu__item-price">$22.000</span>
+              </div>
+              <h3 class="menu__item-name">Cocadas tibias con ron de caña</h3>
+              <p class="menu__item-description">Cocadas suaves, crema de vainilla, coco rallado y reducción ligera de ron cartagenero.</p>
+            </div>
+          </article>
+
+          <article class="menu__item" data-category="postres">
+            <div class="menu__item-media">
+              <img src="assets/images/menu-tarta-maracuya.jpg" alt="Postre de merengue tostado visto desde arriba" class="menu__item-img">
+            </div>
+            <div class="menu__item-body">
+              <div class="menu__item-top">
+                <span class="menu__item-tag">Cierre dulce</span>
+                <span class="menu__item-price">$26.000</span>
+              </div>
+              <h3 class="menu__item-name">Flan de coco y panela</h3>
+              <p class="menu__item-description">Flan cremoso de coco, caramelo de panela, crumble de maíz tostado y ralladura de limón.</p>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="menu__empty" id="menuEmpty" hidden>No hay platos disponibles en esta categoría por ahora.</p>
+
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- DOMICILIOS -->
+    <!-- ============================= -->
+    <section class="delivery" id="domicilios">
+      <div class="delivery__container container">
+
+        <div class="section-heading">
+          <p class="section-eyebrow">Brasa Marina en tu casa</p>
+          <h2 class="section-title">Domicilios en Cartagena</h2>
+          <p class="section-description">
+            Arma tu pedido desde la carta, elige tu zona y sigue cada estado hasta que el repartidor llegue a tu puerta.
+          </p>
+          <p class="delivery__note" id="deliveryMinOrderNote"></p>
+        </div>
+
+        <div class="delivery__zones" id="deliveryZonesGrid"></div>
+
+        <div class="delivery__steps">
+          <article class="delivery__step">
+            <span class="delivery__step-number">1</span>
+            <h3>Arma tu pedido</h3>
+            <p>Agrega platos del menú al carrito y revisa el total antes de confirmar.</p>
+          </article>
+          <article class="delivery__step">
+            <span class="delivery__step-number">2</span>
+            <h3>Elige domicilio</h3>
+            <p>Escribe dirección, teléfono, punto de referencia y cómo vas a pagar.</p>
+          </article>
+          <article class="delivery__step">
+            <span class="delivery__step-number">3</span>
+            <h3>Sigue el estado</h3>
+            <p>Recibido, en preparación, listo, en camino y entregado, todo desde "Mi pedido".</p>
+          </article>
+        </div>
+
+        <div class="delivery__cta">
+          <a href="#menu" class="btn btn--primary">Ver la carta</a>
+          <button class="btn btn--secondary btn--ink" type="button" data-my-order>Seguir mi pedido</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- GALERÍA -->
+    <!-- ============================= -->
+    <section class="gallery" id="galeria">
+      <div class="gallery__container container">
+
+        <div class="section-heading">
+          <p class="section-eyebrow">Un vistazo</p>
+          <h2 class="section-title">Galería</h2>
+          <p class="section-description">El ambiente, los platos y los detalles que nos definen.</p>
+        </div>
+
+        <div class="gallery__grid">
+          <figure class="gallery__item"><img src="assets/images/galeria-01.jpg" alt="Comedor cálido de restaurante con luces colgantes" class="gallery__img" loading="lazy" decoding="async"></figure>
+          <figure class="gallery__item"><img src="assets/images/galeria-02.jpg" alt="Calle colorida del centro histórico de Cartagena" class="gallery__img" loading="lazy" decoding="async"></figure>
+          <figure class="gallery__item"><img src="assets/images/galeria-03.jpg" alt="Cocina caliente con plancha de restaurante" class="gallery__img" loading="lazy" decoding="async"></figure>
+          <figure class="gallery__item"><img src="assets/images/galeria-04.jpg" alt="Plato de mariscos con langosta y camarones" class="gallery__img" loading="lazy" decoding="async"></figure>
+          <figure class="gallery__item"><img src="assets/images/galeria-05.jpg" alt="Cóctel tropical servido en una barra" class="gallery__img" loading="lazy" decoding="async"></figure>
+          <figure class="gallery__item"><img src="assets/images/galeria-06.jpg" alt="Calle colonial de Cartagena con flores rosadas" class="gallery__img" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- RESEÑAS -->
+    <!-- ============================= -->
+    <section class="reviews" id="resenas">
+      <div class="reviews__container container">
+
+        <div class="section-heading">
+          <p class="section-eyebrow">Lo que dicen</p>
+          <h2 class="section-title">Reseñas de nuestros comensales</h2>
+        </div>
+
+        <div class="reviews__grid">
+
+          <article class="review-card">
+            <div class="review-card__rating" aria-label="Calificación 5 de 5 estrellas">★★★★★</div>
+            <p class="review-card__text">"El pescado a la brasa llegó perfecto: piel crocante, salsa de coco suave y un ahumado muy limpio. El salón tiene una luz preciosa."</p>
+            <p class="review-card__author">— Camila R.</p>
+          </article>
+
+          <article class="review-card">
+            <div class="review-card__rating" aria-label="Calificación 5 de 5 estrellas">★★★★★</div>
+            <p class="review-card__text">"Buen ritmo de servicio, cocteles frescos y una carta que se siente cartagenera sin quedarse en lo obvio. Volvería por el arroz de mariscos."</p>
+            <p class="review-card__author">— Daniel M.</p>
+          </article>
+
+          <article class="review-card">
+            <div class="review-card__rating" aria-label="Calificación 4 de 5 estrellas">★★★★☆</div>
+            <p class="review-card__text">"Fuimos en grupo y la parrillada marina funcionó perfecto para compartir. Las costillas con panela fueron sorpresa total."</p>
+            <p class="review-card__author">— Valentina S.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- UBICACIÓN Y HORARIOS -->
+    <!-- ============================= -->
+    <section class="location" id="ubicacion">
+      <div class="location__container container">
+
+        <div class="location__info">
+          <p class="section-eyebrow">Visítanos</p>
+          <h2 class="section-title">Ubicación y horarios</h2>
+
+          <address class="location__address">
+            <span data-settings="address">Calle de la Media Luna #10-42, Getsemaní, Cartagena</span><br>
+            <a href="tel:+573000000000" data-phone-link><span data-settings="phone">+57 300 000 0000</span></a>
+          </address>
+
+          <table class="location__hours">
+            <caption class="location__hours-caption">Horario de atención</caption>
+            <tbody>
+              <tr>
+                <th scope="row">Lunes – Jueves</th>
+                <td>12:00 p.m. – 10:00 p.m.</td>
+              </tr>
+              <tr>
+                <th scope="row">Viernes – Sábado</th>
+                <td>12:00 p.m. – 11:30 p.m.</td>
+              </tr>
+              <tr>
+                <th scope="row">Domingo</th>
+                <td>12:00 p.m. – 9:00 p.m.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <a href="https://maps.google.com/?q=Calle+de+la+Media+Luna+10-42+Getsemani+Cartagena+Colombia" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">Ver en Google Maps</a>
+        </div>
+
+        <div class="location__map">
+          <iframe
+            title="Mapa de ubicación de Brasa Marina en Getsemaní, Cartagena"
+            src="https://www.google.com/maps?q=Calle+de+la+Media+Luna+10-42,+Getseman%C3%AD,+Cartagena,+Colombia&output=embed"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================= -->
+    <!-- RESERVA POR WHATSAPP -->
+    <!-- ============================= -->
+    <section class="reservation" id="reserva">
+      <div class="reservation__container container">
+        <p class="section-eyebrow section-eyebrow--light">Reserva tu mesa</p>
+        <h2 class="reservation__title">Vive la experiencia Brasa Marina</h2>
+        <p class="reservation__text">
+          Escríbenos por WhatsApp con fecha, hora y número de personas. Nuestro equipo confirmará disponibilidad en pocos minutos.
+        </p>
+
+        <a
+          href="https://wa.me/573000000000?text=Hola%2C%20quiero%20hacer%20una%20reserva%20en%20Brasa%20Marina."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn--whatsapp"
+          data-whatsapp-link>
+          <span class="btn__icon" aria-hidden="true">✆</span>
+          Reservar por WhatsApp
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="cart-bar" id="cartBar" hidden>
+    <div class="cart-bar__info">
+      <span><strong data-cart-count>0</strong> productos</span>
+      <strong data-cart-total>$0</strong>
+    </div>
+    <button class="btn btn--primary" type="button" data-open-cart>Ver pedido</button>
+  </div>
+
+  <a
+    href="https://wa.me/573000000000?text=Hola%2C%20quiero%20hacer%20una%20reserva%20en%20Brasa%20Marina."
+    target="_blank"
+    rel="noopener noreferrer"
+    class="floating-whatsapp"
+    aria-label="Reservar por WhatsApp"
+    data-whatsapp-link>
+    Reservar
+  </a>
+
+  <div class="app-toast" id="appToast" role="status" aria-live="polite" hidden></div>
+
+  <div class="cart-backdrop" id="cartBackdrop" hidden></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-labelledby="cartDrawerTitle">
+    <div class="cart-drawer__header">
+      <div>
+        <p class="section-eyebrow">Pedido actual</p>
+        <h2 class="cart-drawer__title" id="cartDrawerTitle">Mi pedido</h2>
+      </div>
+      <button class="icon-button" id="cartCloseBtn" type="button" aria-label="Cerrar carrito">×</button>
+    </div>
+
+    <div class="cart-drawer__body" id="cartItems"></div>
+
+    <div class="cart-drawer__footer">
+      <div class="cart-drawer__total">
+        <span>Subtotal</span>
+        <strong data-cart-total>$0</strong>
+      </div>
+      <p class="cart-drawer__note">El costo de domicilio se calcula en el siguiente paso según tu zona.</p>
+      <button class="btn btn--primary" id="cartCheckoutBtn" type="button">Continuar pedido</button>
+    </div>
+  </aside>
+
+  <section class="modal" id="checkoutModal" aria-hidden="true" aria-labelledby="checkoutTitle">
+    <div class="modal__panel">
+      <div class="modal__header">
+        <div>
+          <p class="section-eyebrow">Confirmación</p>
+          <h2 class="modal__title" id="checkoutTitle">Hacer pedido</h2>
+        </div>
+        <button class="icon-button" id="checkoutCloseBtn" type="button" aria-label="Cerrar checkout">×</button>
+      </div>
+
+      <form class="checkout-form" id="checkoutForm">
+        <fieldset class="checkout-form__group">
+          <legend>Tipo de pedido</legend>
+          <div class="choice-grid">
+            <label class="choice-card is-selected">
+              <input type="radio" name="orderType" value="table" checked data-autofocus>
+              <span>
+                <strong>En mesa</strong>
+                <small>Ideal si entraste desde el QR del restaurante.</small>
+              </span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="orderType" value="takeaway">
+              <span>
+                <strong>Para llevar</strong>
+                <small>Lo recoges en barra cuando esté listo.</small>
+              </span>
+            </label>
+            <label class="choice-card" id="deliveryChoice">
+              <input type="radio" name="orderType" value="delivery">
+              <span>
+                <strong>Domicilio</strong>
+                <small>Te lo llevamos a tu dirección en Cartagena.</small>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-grid">
+          <label class="form-field" id="tableField">
+            <span>Mesa</span>
+            <select name="tableNumber" id="tableNumberSelect"></select>
+          </label>
+
+          <label class="form-field">
+            <span>Nombre</span>
+            <input type="text" name="customerName" placeholder="Ej: Camila R." autocomplete="name">
+          </label>
+
+          <label class="form-field" id="phoneField" hidden>
+            <span>Teléfono de contacto</span>
+            <input type="tel" name="customerPhone" placeholder="Ej: 300 555 0000" autocomplete="tel" inputmode="tel">
+          </label>
+        </div>
+
+        <fieldset class="checkout-form__group checkout-form__group--boxed" id="deliveryFields" hidden>
+          <legend>Datos de entrega</legend>
+          <p class="checkout-form__hint" id="deliveryMinNote"></p>
+
+          <div class="form-grid">
+            <label class="form-field">
+              <span>Zona de entrega</span>
+              <select name="deliveryZoneId" id="deliveryZoneSelect" required></select>
+            </label>
+
+            <label class="form-field">
+              <span>Método de pago</span>
+              <select name="paymentMethod" id="paymentMethodSelect"></select>
+            </label>
+          </div>
+
+          <label class="form-field">
+            <span>Dirección de entrega</span>
+            <input type="text" name="deliveryAddress" placeholder="Ej: Carrera 2 #8-45, Edificio Mar Azul, Apto 704" autocomplete="street-address" required>
+          </label>
+
+          <label class="form-field">
+            <span>Punto de referencia (opcional)</span>
+            <input type="text" name="deliveryReference" placeholder="Portería, color de la casa, piso...">
+          </label>
+
+          <label class="form-field" id="changeField">
+            <span>¿Con cuánto pagas?</span>
+            <input type="text" name="changeFor" placeholder="Ej: 100.000" inputmode="numeric">
+          </label>
+        </fieldset>
+
+        <label class="form-field">
+          <span>Notas especiales</span>
+          <textarea name="notes" rows="3" placeholder="Sin cebolla, alergias, salsas aparte..."></textarea>
+        </label>
+
+        <div class="order-summary" id="checkoutSummary"></div>
+
+        <p class="form-message" id="checkoutMessage" role="alert" hidden></p>
+
+        <div class="modal__actions">
+          <button class="btn btn--secondary btn--ink" id="checkoutBackBtn" type="button">Volver al carrito</button>
+          <button class="btn btn--primary" type="submit">Confirmar pedido</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="modal" id="orderStatusModal" aria-hidden="true" aria-labelledby="orderStatusTitle">
+    <div class="modal__panel modal__panel--narrow">
+      <div class="modal__header">
+        <div>
+          <p class="section-eyebrow">Seguimiento</p>
+          <h2 class="modal__title" id="orderStatusTitle">Estado del pedido</h2>
+        </div>
+        <button class="icon-button" id="orderStatusCloseBtn" type="button" aria-label="Cerrar seguimiento">×</button>
+      </div>
+
+      <div id="orderStatusContent"></div>
+
+      <div class="modal__actions">
+        <button class="btn btn--primary" id="orderStatusCartBtn" type="button">Seguir ordenando</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= -->
+  <!-- FOOTER -->
+  <!-- ============================= -->
+  <footer class="footer">
+    <div class="footer__container container">
+
+      <div class="footer__brand">
+        <span class="footer__logo">Brasa Marina</span>
+        <p class="footer__tagline">Cocina caribeña contemporánea en Getsemaní, Cartagena.</p>
+      </div>
+
+      <nav class="footer__nav" aria-label="Enlaces del sitio">
+        <ul class="footer__nav-list">
+          <li><a href="#inicio" class="footer__nav-link">Inicio</a></li>
+          <li><a href="#sobre-nosotros" class="footer__nav-link">Nosotros</a></li>
+          <li><a href="#menu" class="footer__nav-link">Menú</a></li>
+          <li><a href="#domicilios" class="footer__nav-link">Domicilios</a></li>
+          <li><a href="#galeria" class="footer__nav-link">Galería</a></li>
+          <li><a href="#ubicacion" class="footer__nav-link">Ubicación</a></li>
+          <li><a href="#reserva" class="footer__nav-link">Reservas</a></li>
+          <li><a href="admin/" class="footer__nav-link">Panel interno</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer__social">
+        <a href="https://www.instagram.com/brasamarinacartagena" class="footer__social-link" aria-label="Instagram de Brasa Marina" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/brasamarinacartagena" class="footer__social-link" aria-label="Facebook de Brasa Marina" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://wa.me/573000000000" class="footer__social-link" aria-label="WhatsApp de Brasa Marina" data-whatsapp-link>WhatsApp</a>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">© 2026 Brasa Marina. Todos los derechos reservados.</p>
+      <p class="footer__credit">Proyecto conceptual desarrollado por Rasec Dev. Fotos base: Unsplash.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

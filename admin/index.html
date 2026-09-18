@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Brasa Marina</title>
+  <link rel="icon" href="../assets/images/favicon.png" type="image/png">
+</head>
+<body>
+  <script type="module">
+    import { getAdminSession } from '../js/services/auth-service.js';
+
+    const session = await getAdminSession();
+    window.location.href = session ? './dashboard/' : './login/';
+  </script>
+</body>
+</html>
