@@ -2,6 +2,10 @@
 
 Proyecto conceptual de plataforma web para restaurante, desarrollado para el portafolio de Rasec Dev.
 
+**Sitio en vivo:** https://brasamarina-rasecdev.pages.dev
+
+**Demo con panel libre:** https://brasamarina-demo.pages.dev (en `/admin/`, boton **Entrar con la cuenta demo**). Es el mismo repositorio: cuando la direccion termina en `-demo.pages.dev`, `js/services/supabase-config.js` deja a Supabase de lado y cada visitante prueba con datos de ejemplo guardados en su navegador.
+
 Brasa Marina es un restaurante ficticio de cocina caribena contemporanea ubicado en Getsemani, Cartagena. El objetivo del sitio es demostrar una experiencia comercial completa: pagina publica premium, menu digital, carrito, pedidos en mesa, para llevar y a domicilio, seguimiento del pedido y panel administrativo.
 
 ## Tecnologias
